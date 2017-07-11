@@ -1,0 +1,59 @@
+
+虚拟服务器页面缺失配置项部分
+
+1  虚拟服务器列表支持克隆  //需要ue增加
+2   虚拟服务器状态的配置  //需要增加
+3  最大连接数
+4  slb profile   该命令用于虚拟服务器绑定均衡策略slb-profile，slb-profile定义了服务池、静态均衡、连接复用和内容交换等信息
+5  source ip forward   该命令用于配置客户端的源ip地址是否不变的传输到服务器端, 也就是说客户端报文经过ADC设备时，报文的源地址是否发生改变
+6  error msg   如果VS状态为disable/maintain，或者VS中的所有后台服务器都不可用时，VS收到用户请求，会回复错误信息。用户可以自定义错误信息的内容。用户不指定也会有缺省错误信息反馈
+7  ip或者IP范围需要增加一个单选框 选择IP时，有一个输入框；选择范围时，有两个输入框。还需要增加一个ipv4和ipv6的单选框。
+8 type支持 http|ftp|tcp|udp|smtp|pop3|imap
+
+app profile （http/SMTP/POP3/IMAP 支持）
+
+ 1  http的配置
+	1.1 	keepalive timeout  (75s,0-3600)  input
+	1.2	    connect-timeout   (60s,1-120)   input 
+	1.3     read-timeout	(60s,1-3600s)   input 
+	1.4     send-timeout     (60s,1-120)     input 
+	1.5		x-forwarded-for   携带客户端地址，在web服务器端获得用户的真实ip。  checkbox
+	1.6     buffer-size     (64k,8k-4096k)  input
+	1.7     cache      复杂配置项         checkbox
+			1.7.1  resource-type   (1-128) input
+			1.7.2  disk-size  (100M-10G)  input
+			1.7.3  time-out   (1-36000s)  input
+	1.8     compression   复杂配置项       checkbox
+			1.8.1  buffer-size  (4096,1k-1024k) input
+			1.8.2  min-length   (1k,0-100k)   input
+			1.8.3  content-type  (1-128)   input
+ 2  smtp/pop3/imap 的配置
+	2.1     timeout  (60,1-3600)   
+	2.2     xclient(仅用于smtp协议)   checkbox    是否允许客户端使用XCLIENT命令连接SMTP后端服务器,参考http://man.chinaunix.net/newsoft/postfix/XCLIENT_README.html
+	2.3		auth-http  (1-128)  input
+	2.4     auth-methods   (login/plain/cram-md5/apop(只用于pop3)/none)   combobox
+	2.5		capabilities  (1-128) input
+	2.6		pass-error-message(仅用于pop3协议)  checkbox   是否把服务器回应的认证error消息发送给客户端
+	
+	
+health check 
+
+	name	名称  input
+	type 	类型  combobox  支持TCP、TCP ECHO、UDP、HTTP、HTTPS、ICMP、FTP、SMTP、POP3、IMAP、DNS、Radius、LDAP、SNMP、External
+	interval 间隔时间   input
+	timeout	超时时间    input
+	retry	重试次数	input
+	port	端口		input  支持tcp-echo、tcp、udp、https
+	send-string			input  支持tcp、udp、http、https
+	recive-string 		input	支持tcp、udp、http、https
+	reverse  			checkbox	支持tcp、udp、http、https、dns
+	username			input  支持http、https、pop3、imap
+	password			input	支持http、https、pop3、imap
+	cipher-list			combobox	支持https			AES:ALL:!aNULL:!eNULL:!RC4:@STRENGTH
+	ssl-version			combobox	支持https			[v1|v2|v3|tls1.0|tls1.1|tls1.2
+	client-certificate  combobox 支持https
+	domain				input	支持smtp、dns
+	folder				input	支持imap
+	domain-ip			input	支持dns
+	arguments			input	支持external
+
